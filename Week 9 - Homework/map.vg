@@ -1,0 +1,88 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 700,
+  "height": 700,
+  "title": "Average Australian Temperature Readings in 2017",
+  "layer": [
+    {
+      "data": {
+        "url": "TopoJSON Files/ne_1.json",
+        "format": {
+          "type": "topojson",
+          "feature": "ne_10m_admin_1_states_provinces"  
+        }
+      },
+      "projection": {
+        "type": "equirectangular",
+        "rotate": [130, 0, 0]  
+      },
+      "mark": {
+        "type": "geoshape",
+        "stroke": "black",
+        "strokeWidth": 1,
+        "fill": "lightgray"
+      }
+    },
+    {
+      "data": {
+        "url": "TopoJSON Files/ne_1.json",
+        "format": {
+          "type": "topojson",
+          "feature": "ne_110m_graticules_10"  
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "stroke": "darkgrey",
+        "strokeWidth": 1
+      }
+    },
+    {
+      "data": {
+        "url": "Data Files/cleaned_weather_data.csv"
+      },
+      "projection": {
+        "type": "equirectangular",
+        "rotate": [130, 0, 0]  
+      },
+      
+      "transform": [
+        {
+          "calculate": "year(datum.Date)",
+          "as": "Year"
+        },
+        {
+          "filter": "datum.Year == 2017" 
+        },
+        {
+          "aggregate": 
+          [
+          {"op": "average", "field": "MaxTemp", "as": "AverageTemp"}
+          ],
+          "groupby": ["Latitude", "Longitude", "Location", "Year"]
+        }
+      ],
+
+      "mark": {"type": "circle", "tooltip": {"content": "data"}, "opacity": 1, "stroke": "black", "strokeWidth": 0.5},
+      "encoding": {
+        "longitude": {"field": "Longitude", "type": "quantitative"},
+        "latitude": {"field": "Latitude", "type": "quantitative"},
+        "color": {
+          "field": "AverageTemp",
+          "type": "quantitative",
+          "title": "Average Temperature (°C)",
+          "scale": {
+            "type": "linear",
+            "domain": [18, 24, 30],
+            "range": ["#67a9cf", "#f7f7f7", "#ef8a62"]
+          } 
+        },
+        "size": {"value": 100},
+        "tooltip": [
+        {"field": "Location", "type": "nominal"},
+        {"field": "AverageTemp", "type": "quantitative", "title": "Average Temperature (°C)", "format": ".2f"}
+      ]
+      }
+    }
+  ]
+}
