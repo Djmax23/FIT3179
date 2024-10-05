@@ -1,0 +1,218 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "width": 500,
+    "height": 500,
+    "title": "Temperature vs. Rainfall for Major Australian Cities",
+    "data": {
+        "url": "Data Files/cleaned_weather_data_with_states.csv"
+    },
+    "params": [
+        {
+            "name": "Year_selection",
+            "bind": {
+                "input": "select",
+                "options": [
+                    null,
+                    2008,
+                    2009,
+                    2010,
+                    2011,
+                    2012,
+                    2013,
+                    2014,
+                    2015,
+                    2016,
+                    2017
+                ],
+                "labels": [
+                    "Show All",
+                    "2008",
+                    "2009",
+                    "2010",
+                    "2011",
+                    "2012",
+                    "2013",
+                    "2014",
+                    "2015",
+                    "2016",
+                    "2017"
+                ],
+                "name": "Select Year: "
+            }
+        },
+        {
+            "name": "State_selection",
+            "bind": {
+                "input": "select",
+                "options": [
+                    null,
+                    "Australian Capital Territory",
+                    "New South Wales",
+                    "Northern Territory",
+                    "Queensland",
+                    "South Australia",
+                    "Victoria",
+                    "Western Australia"
+                ],
+                "labels": [
+                    "Show All",
+                    "Australian Capital Territory",
+                    "New South Wales",
+                    "Northern Territory",
+                    "Queensland",
+                    "South Australia",
+                    "Victoria",
+                    "Western Australia"
+                ],
+                "name": "Select State: "
+            }
+        }
+    ],
+    "background": "transparent",
+    "transform": [
+        {
+            "calculate": "year(datum.Date)",
+            "as": "Year"
+        },
+        {
+            "filter": "Year_selection == null || datum.Year == Year_selection"
+        },
+        {
+            "filter": "State_selection == null || datum.State == State_selection"
+        },
+        {
+            "aggregate": [
+                {
+                    "op": "average",
+                    "field": "MinTemp",
+                    "as": "Average Min Temp"
+                },
+                {
+                    "op": "average",
+                    "field": "MaxTemp",
+                    "as": "Average Max Temp"
+                },
+                {
+                    "op": "average",
+                    "field": "Rainfall",
+                    "as": "Average Rainfall"
+                }
+            ],
+            "groupby": [
+                "Location",
+                "State"
+            ]
+        }
+    ],
+    "encoding": {
+        "x": {
+            "field": "Average Min Temp",
+            "type": "quantitative",
+            "title": "Average Minimum Temperature (°C)"
+        },
+        "y": {
+            "field": "Average Max Temp",
+            "type": "quantitative",
+            "title": "Average Maximum Temperature (°C)"
+        },
+        "color": {
+            "field": "State",
+            "type": "nominal",
+            "scale": {
+                "domain": [
+                    "Australian Capital Territory",
+                    "New South Wales",
+                    "Northern Territory",
+                    "Queensland",
+                    "South Australia",
+                    "Victoria",
+                    "Western Australia"
+                ],
+                "range": [
+                    "#e41a1c",
+                    "#984ea3",
+                    "#ff7f00",
+                    "#a6cee3",
+                    "#377eb8",
+                    "#a65628",
+                    "#f781bf"
+                ]
+            }
+        },
+        "tooltip": [
+            {
+                "field": "Location",
+                "type": "nominal",
+                "title": "Location"
+            },
+            {
+                "field": "State",
+                "type": "nominal",
+                "title": "State"
+            },
+            {
+                "field": "Average Min Temp",
+                "title": "Avg Min Temp (°C)",
+                "type": "quantitative",
+                "format": ".2f"
+            },
+            {
+                "field": "Average Max Temp",
+                "title": "Avg Max Temp (°C)",
+                "type": "quantitative",
+                "format": ".2f"
+            },
+            {
+                "field": "Average Rainfall",
+                "title": "Avg Rainfall (mm)",
+                "type": "quantitative",
+                "format": ".2f"
+            }
+        ]
+    },
+    "layer": [
+        {
+            "mark": {
+                "type": "circle",
+                "opacity": 0.6
+            },
+            "encoding": {
+                "size": {
+                    "field": "Average Rainfall",
+                    "type": "quantitative",
+                    "title": "Average Rainfall (mm)",
+                    "scale": {
+                        "range": [
+                            0,
+                            1000
+                        ]
+                    }
+                }
+            }
+        },
+        {
+            "mark": {
+                "type": "text",
+                "align": "center",
+                "baseline": "middle",
+                "dx": -35,
+                "fontSize": 12
+            },
+            "encoding": {
+                "text": {
+                    "field": "Location"
+                },
+                "color": {
+                    "value": "black"
+                },
+                "opacity": {
+                    "condition": {
+                        "test": "datum.Location == 'Melbourne' || datum.Location == 'Sydney' || datum.Location == 'Adelaide' || datum.Location == 'Perth' || datum.Location == 'Brisbane' || datum.Location == 'Canberra' || datum.Location == 'Darwin'",
+                        "value": 1
+                    },
+                    "value": 0
+                }
+            }
+        }
+    ]
+}
