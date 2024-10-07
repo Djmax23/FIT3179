@@ -1,0 +1,87 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 500,
+  "height": 500,
+  "background": "transparent",
+  "layer": [
+    {
+      "data": {
+        "url": "../TopoJSON Files/ne_1.json",
+        "format": {
+          "type": "topojson",
+          "feature": "ne_10m_admin_1_states_provinces"  
+        }
+      },
+      "projection": {
+        "type": "equirectangular",
+        "rotate": [130, 0, 0]  
+      },
+      "mark": {
+        "type": "geoshape",
+        "stroke": "black",
+        "strokeWidth": 1,
+        "fill": "lightgray"
+      }
+    },
+    {
+      "data": {
+        "url": "../TopoJSON Files/ne_1.json",
+        "format": {
+          "type": "topojson",
+          "feature": "ne_110m_graticules_10"  
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "stroke": "darkgrey",
+        "strokeWidth": 1
+      }
+    },
+    {
+      "data": {
+        "url": "../Data Files/cleaned_weather_data.csv"
+      },
+      "projection": {
+        "type": "equirectangular",
+        "rotate": [130, 0, 0]  
+      },
+      "transform": [
+        {
+          "calculate": "year(datum.Date)",
+          "as": "Year"
+        },
+        {
+          "filter": "datum.Year >= 2010 && datum.Year <= 2012" 
+        },
+        {
+          "aggregate": 
+          [
+          {"op": "average", "field": "Rainfall", "as": "AverageRainfall"}
+          ],
+          "groupby": ["Latitude", "Longitude", "Location", "Year"]
+        }
+      ],
+
+      "mark": {"type": "circle", "tooltip": {"content": "data"}, "opacity": 1, "stroke": "black", "strokeWidth": 0.5},
+      "encoding": {
+        "longitude": {"field": "Longitude", "type": "quantitative"},
+        "latitude": {"field": "Latitude", "type": "quantitative"},
+        "color": {
+          "field": "AverageRainfall",
+          "type": "quantitative",
+          "title": "Average Rainfall (mm)",
+          "scale": {
+            "type": "linear",
+            "domain": [0, 2.5, 5],
+            "range": ["#deebf7","#9ecae1","#3182bd"]
+          } 
+        },
+        "size": {"value": 100},
+        "tooltip": [
+        {"field": "Location", "type": "nominal"},
+        {"field": "AverageRainfall", "type": "quantitative", "title": "Average Rainfall (mm)", "format": ".2f"}
+      ]
+      }
+    }
+  ]
+}

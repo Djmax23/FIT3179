@@ -1,0 +1,49 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "width": 400,
+    "height": 400,
+    "background": "transparent",
+    "data": {
+      "url": "../Data Files/cleaned_weather_data_with_states.csv"
+    },
+    "transform": [
+      {
+        "calculate": "year(datum.Date)",
+        "as": "Year"
+      },
+      {
+        "filter": "datum.Year >= 2010 && datum.Year <= 2012"
+      },
+      {
+        "aggregate": [
+          {
+            "op": "sum",
+            "field": "Rainfall",
+            "as": "TotalRainfall"
+          }
+        ],
+        "groupby": ["State"]
+      }
+    ],
+    "mark": {
+      "type": "bar",
+      "fill": "lightblue"
+    },
+    "encoding": {
+      "x": {
+        "field": "State",
+        "type": "nominal",
+        "title": "State"
+      },
+      "y": {
+        "field": "TotalRainfall",
+        "type": "quantitative",
+        "title": "Total Rainfall (mm)"
+      },
+      "tooltip": [
+        {"field": "State", "type": "nominal"},
+        {"field": "TotalRainfall", "type": "quantitative", "title": "Total Rainfall (mm)"}
+      ]
+    }
+  }
+  
