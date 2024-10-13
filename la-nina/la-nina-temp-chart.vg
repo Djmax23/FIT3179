@@ -1,0 +1,137 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 400,
+  "height": 300,
+  "background": "transparent",
+  "params": [
+    {
+      "name": "State_selection",
+      "value": "New South Wales",
+      "bind": {
+        "input": "select",
+        "options": [
+          "New South Wales",
+          "Victoria",
+          "Queensland",
+          "South Australia",
+          "Western Australia",
+          "Tasmania",
+          "Northern Territory",
+          "Australian Capital Territory"
+        ],
+        "name": "State"
+      }
+    },
+    {
+      "name": "Year_selection",
+      "value": 2010,
+      "bind": {
+        "input": "range",
+        "min": 2010,
+        "max": 2012,
+        "step": 1,
+        "name": "Year"
+      }
+    }
+  ],
+  "data": {
+    "url": "../Data Files/cleaned_weather_data_with_states.csv",
+    "format": {
+      "type": "csv"
+    }
+  },
+  "transform": [
+    {
+      "calculate": "split(datum.Date, '/')[2] + '-' + split(datum.Date, '/')[1] + '-' + split(datum.Date, '/')[0]",
+      "as": "FormattedDate"
+    },
+    {
+      "calculate": "datetime(datum.FormattedDate)",
+      "as": "ParsedDate"
+    },
+    {
+      "calculate": "year(datum.ParsedDate)",
+      "as": "Year"
+    },
+    {
+      "calculate": "month(datum.ParsedDate)",
+      "as": "Month"
+    },
+    {
+      "filter": "datum.State == State_selection && datum.Year == Year_selection"
+    },
+    {
+      "aggregate": [
+        {
+          "op": "mean",
+          "field": "MinTemp",
+          "as": "AvgMinTemp"
+        },
+        {
+          "op": "mean",
+          "field": "MaxTemp",
+          "as": "AvgMaxTemp"
+        }
+      ],
+      "groupby": [
+        "Month"
+      ]
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "rule",
+        "strokeWidth": 20,
+        "color": "#0073B1"
+      },
+      "encoding": {
+        "x": {
+          "field": "Month",
+          "type": "ordinal",
+          "title": "Month",
+          "sort": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12
+          ],
+          "axis": {
+            "labelAngle": 0,
+            "labelExpr": "datum.value == 1 ? 'Jan' : datum.value == 2 ? 'Feb' : datum.value == 3 ? 'Mar' : datum.value == 4 ? 'Apr' : datum.value == 5 ? 'May' : datum.value == 6 ? 'Jun' : datum.value == 7 ? 'Jul' : datum.value == 8 ? 'Aug' : datum.value == 9 ? 'Sep' : datum.value == 10 ? 'Oct' : datum.value == 11 ? 'Nov' : 'Dec'"
+          }
+        },
+        "y": {
+          "field": "AvgMinTemp",
+          "type": "quantitative",
+          "title": "Temperature (°C)"
+        },
+        "y2": {
+          "field": "AvgMaxTemp"
+        },
+        "tooltip": [
+          {
+            "field": "AvgMinTemp",
+            "type": "quantitative",
+            "title": "Average Min Temp",
+            "format": ".2f"
+          },
+          {
+            "field": "AvgMaxTemp",
+            "type": "quantitative",
+            "title": "Average Max Temp",
+            "format": ".2f"
+          }
+        ]
+      }
+    }
+  ]
+}

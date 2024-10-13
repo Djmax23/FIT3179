@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;500;900&display=swap" rel="stylesheet">
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+    <script src="vega_lite_vis.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <title>El Niño vs La Niña</title>
+</head>
+
+<body>
+
+    <!-- Banner for Title -->
+    <div class="banner roboto-black">
+        <span style="color: #FF5733">El Niño</span>
+        vs
+        <span style="color: #0073B1">La Niña</span>
+    </div>
+
+    <!-- Central Visualization -->
+    <div class="container">
+        <div class="central-visualisation">
+            <div class="content-header roboto-medium">Overview</div>
+            <div>
+                <p class="roboto-regular">
+                    El Niño and La Niña are opposite phases of what is known as the El Niño-Southern Oscillation (ENSO)
+                    cycle. The ENSO cycle is a scientific term that describes the fluctuations in temperature between
+                    the ocean and atmosphere in the east-central Equatorial Pacific. The ENSO cycle is a scientific term
+                    that describes the fluctuations in temperature between the ocean and atmosphere in the east-central
+                    Equatorial Pacific.
+                </p>
+                <p class="roboto-regular">
+                    Use the different years on the map to see how the temperature changes between El Niño and La Niña
+                </p>
+            </div>
+            <div id="index-map" class="visualisation">
+                <!-- Central visualization goes here -->
+            </div>
+        </div>
+
+        <!-- Two Column Layout -->
+        <div class="two-columns">
+            <!-- Left Column: El Niño -->
+            <div class="column left-column">
+                <div class="content-header roboto-black"><span style="color: #FF5733">El Niño (2015-2016)</span></div>
+                <div class="visualisation-block">
+                    <div class="content-subheader roboto-medium">Cumulative Rain over El Niño period</div>
+                    <p class="roboto-regular">
+                        During El Niño, the surface water temperature remains on the east side of the Pacific Ocean,
+                        this cooler water means less evaporation, less rainfall and warmer temperatures.
+                    </p>
+                    <div id="el-nino-chart" class="visualisation">El Niño Visualization 1</div>
+                </div>
+                <div class="visualisation-block">
+                    <div class="content-subheader roboto-medium">Proportion of Rainy Days</div>
+                    <p class="roboto-regular">
+                        This donut chart shows the proportion of days that had rainfall for each state during El Niño.
+                    </p>
+                    <div id="el-nino-donut" class="visualisation">El Niño Visualization 2</div>
+                </div>
+                <div class="visualisation-block">
+                    <div class="content-subheader roboto-medium">Temperature Ranges for El Niño Period</div>
+                    <p class="roboto-regular">
+                        This chart shows the temperature ranges for each state during El Niño. Notice the higher ranges
+                        here compared to the La Niña period.
+                    </p>
+                    <div id="el-nino-temp-chart" class="visualisation">El Niño Visualization 2</div>
+                </div>
+                <div class="visualisation-block">
+                    <div class="content-subheader roboto-medium">Significant Weather Events during El Niño</div>
+                    <p class="roboto-regular">
+                        This map shows the significant weather events that occurred during El Niño. Press on each state
+                        to be directed to a link of the event.
+                    </p>
+                    <div id="el-nino-map" class="visualisation">La Niña Visualization 3</div>
+                </div>
+            </div>
+
+            <!-- Right Column: La Niña -->
+            <div class="column right-column">
+                <div class="content-header roboto-black"><span style="color: #0073B1">La Niña (2010-2012)</span></div>
+                <div class="visualisation-block">
+                    <div class="content-subheader roboto-medium">Cumulative Rain over La Niña period</div>
+                    <p class="roboto-regular">
+                        During La Niña, the surface water temperature remains on the west side of the Pacific Ocean,
+                        this warmer water means more evaporation, more rainfall and cooler temperatures.
+                    </p>
+                    <div id="la-nina-chart" class="visualisation">La Niña Visualization 1</div>
+                </div>
+                <div class="visualisation-block">
+                    <div class="content-subheader roboto-medium">Proportion of Rainy Days</div>
+                    <p class="roboto-regular">
+                        This donut chart shows the proportion of days that had rainfall for each state during La Niña.
+                    </p>
+                    <div id="la-nina-donut" class="visualisation">La Niña Visualization 2</div>
+                </div>
+                <div class="visualisation-block">
+                    <div class="content-subheader roboto-medium">Temperature Ranges for La Niña Period</div>
+                    <p class="roboto-regular">
+                        This chart shows the temperature ranges for each state during La Niña. Notice the lower ranges
+                        here compared to the El Niño period.
+                    </p>
+                    <div id="la-nina-temp-chart" class="visualisation">La Niña Visualization 2</div>
+                </div>
+                <div class="visualisation-block">
+                    <div class="content-subheader roboto-medium">Significant Weather Events during La Niña</div>
+                    <p class="roboto-regular">
+                        This map shows the significant weather events that occurred during La Niña. Press on each state
+                        to be directed to a link of the event.
+                    </p>
+                    <div id="la-nina-map" class="visualisation">La Niña Visualization 3</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p class="footer-text roboto-regular">
+            Created by Dylan Maxwell 13/10/2024
+        </p>
+        <p class="footer-text roboto-regular">
+            Data sourced from Kaggle and the Bureau of Meteorology <a
+                href="https://www.kaggle.com/datasets/arunavakrchakraborty/australia-weather-data">link</a>
+        </p>
+        <p class="footer-text roboto-regular">
+            GenAI has been used to enhance the quality of text
+        </p>
+        <p class="footer-text roboto-regular">
+            The following links are used in the interactive maps
+        </p>
+        <p class="footer-text roboto-regular">
+            https://www.abc.net.au/news/2016-04-20/one-year-since-the-2015-hunter-valley-flood/7321888
+        </p>
+        <p class="footer-text roboto-regular">
+            https://www.abc.net.au/news/2016-03-16/satellite-pictures-reveal-scale-of-summers-bushfire-destruction/7232594
+        </p>
+        <p class="footer-text roboto-regular">
+            https://www.theguardian.com/australia-news/2015/oct/05/queensland-bushfires-emergency-crews-contend-with-hot-dry-weather
+        </p>
+        <p class="footer-text roboto-regular">
+            https://knowledge.aidr.org.au/resources/bushfire-waroona-yarloop-fire-2016/#:~:text=The%20Waroona%20bushfire%2C%20100%20km,in%20Yarloop%20in%20January%202016.
+        </p>
+        <p class="footer-text roboto-regular">
+            https://knowledge.aidr.org.au/resources/storm-extreme-weather-event-south-australia-september-2016
+        </p>
+        <p class="footer-text roboto-regular">
+            https://knowledge.aidr.org.au/resources/flood-tasmania-june-july-2016/
+        </p>
+        <p class="footer-text roboto-regular">
+            https://www.ntnews.com.au/news/northern-territory/nt-weather-records-broken-during-first-nine-months-of-2016/news-story/3a2e8db5d147a5df06bc46001cc88939?nk=82899e14999965f2fc98d51f91011829-1728706323
+        </p>
+
+        <p class="footer-text roboto-regular">
+            https://www.abc.net.au/news/2010-10-15/flooding-isolates-nsw-towns/2299838
+        </p>
+        <p class="footer-text roboto-regular">
+            https://floodlist.com/australia/reflections-floods-victoria-2010-2011
+        </p>
+        <p class="footer-text roboto-regular">
+            https://knowledge.aidr.org.au/resources/flood-queensland-2010-2011/
+        </p>
+        <p class="footer-text roboto-regular">
+            https://knowledge.aidr.org.au/resources/storm-severe-storm-perth-western-australia-2010/
+        </p>
+        <p class="footer-text roboto-regular">
+            https://www.abc.net.au/news/2010-12-08/flash-flooding-as-storms-sweep-sa/2366422
+        </p>
+        <p class="footer-text roboto-regular">
+            https://www.abc.net.au/news/2010-08-12/safety-checks-after-blades-blow-in-the-wind/941156
+        </p>
+        <p class="footer-text roboto-regular">
+            https://www.abc.net.au/news/2010-01-09/alice-springs-flood-threat-passes/1203228
+        </p>
+    </footer>
+
+</body>
+
+</html>

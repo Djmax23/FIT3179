@@ -1,0 +1,186 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 500,
+  "height": 500,
+  "background": "transparent",
+  "params": [
+    {
+      "name": "Year_selection",
+      "value": 2015,
+      "bind": {
+        "input": "range",
+        "min": 2010,
+        "max": 2016,
+        "step": 1,
+        "name": "Year"
+      }
+    }
+  ],
+  "layer": [
+    {
+      "data": {
+        "url": "TopoJSON Files/ne_2.json",
+        "format": {
+          "type": "topojson",
+          "feature": "ne_10m_admin_1_states_provinces"
+        }
+      },
+      "projection": {
+        "type": "equirectangular",
+        "rotate": [
+          130,
+          0,
+          0
+        ]
+      },
+      "mark": {
+        "type": "geoshape",
+        "stroke": "black",
+        "strokeWidth": 1,
+        "fill": "lightgray"
+      }
+    },
+    {
+      "data": {
+        "url": "Data Files/cleaned_weather_data_with_states.csv"
+      },
+      "projection": {
+        "type": "equirectangular",
+        "rotate": [
+          130,
+          0,
+          0
+        ]
+      },
+      "transform": [
+        {
+          "calculate": "datum.State === 'New South Wales' ? 'NSW' : datum.State === 'Victoria' ? 'VIC' : datum.State === 'Queensland' ? 'QLD' : datum.State === 'Western Australia' ? 'WA' : datum.State === 'South Australia' ? 'SA' : datum.State === 'Tasmania' ? 'TAS' : datum.State === 'Northern Territory' ? 'NT' : datum.State === 'Australian Capital Territory' ? 'ACT' : datum.State",
+          "as": "StateAbbreviation"
+        },
+        {
+          "calculate": "split(datum.Date, '/')[2] + '-' + split(datum.Date, '/')[1] + '-' + split(datum.Date, '/')[0]",
+          "as": "FormattedDate"
+        },
+        {
+          "calculate": "datetime(datum.FormattedDate)",
+          "as": "ParsedDate"
+        },
+        {
+          "calculate": "year(datum.ParsedDate)",
+          "as": "Year"
+        },
+        {
+          "filter": "datum.Year == Year_selection"
+        },
+        {
+          "aggregate": [
+            {
+              "op": "average",
+              "field": "MaxTemp",
+              "as": "AverageTemp"
+            }
+          ],
+          "groupby": [
+            "Latitude",
+            "Longitude",
+            "Location"
+          ]
+        }
+      ],
+      "mark": {
+        "type": "circle",
+        "tooltip": {
+          "content": "data"
+        },
+        "opacity": 1,
+        "stroke": "black",
+        "strokeWidth": 0.5
+      },
+      "encoding": {
+        "longitude": {
+          "field": "Longitude",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "Latitude",
+          "type": "quantitative"
+        },
+        "color": {
+          "field": "AverageTemp",
+          "type": "quantitative",
+          "title": "Average Temperature (°C)",
+          "scale": {
+            "type": "linear",
+            "domain": [
+              18,
+              24,
+              30
+            ],
+            "range": [
+              "#67a9cf",
+              "#f7f7f7",
+              "#ef8a62"
+            ]
+          }
+        },
+        "size": {
+          "value": 100
+        },
+        "tooltip": [
+          {
+            "field": "Location",
+            "type": "nominal"
+          },
+          {
+            "field": "AverageTemp",
+            "type": "quantitative",
+            "title": "Average Temperature (°C)",
+            "format": ".2f"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "Longitude": 153.4,
+            "Latitude": -28.0,
+            "Text": [
+              "La Niña & El Niño",
+              "Primarily influence",
+              "coastal cities"
+            ]
+          }
+        ]
+      },
+      "projection": {
+        "type": "equirectangular",
+        "rotate": [
+          130,
+          0,
+          0
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 10,
+        "dy": -5,
+        "fontSize": 14,
+        "color": "black"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "Longitude"
+        },
+        "latitude": {
+          "field": "Latitude"
+        },
+        "text": {
+          "field": "Text"
+        }
+      }
+    }
+  ]
+}
