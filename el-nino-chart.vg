@@ -4,7 +4,7 @@
   "height": 375,
   "background": "transparent",
   "data": {
-    "url": "Data Files/cleaned_weather_data_with_states.csv"
+    "url": "https://raw.githubusercontent.com/Djmax23/FIT3179/refs/heads/viz-2/Data%20Files/cleaned_weather_data_with_states.csv"
   },
   "transform": [
     {
