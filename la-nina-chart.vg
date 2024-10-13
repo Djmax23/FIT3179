@@ -1,0 +1,135 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 350,
+  "height": 375,
+  "background": "transparent",
+  "data": {
+    "url": "Data Files/cleaned_weather_data_with_states.csv"
+  },
+  "transform": [
+    {
+      "calculate": "datum.State === 'New South Wales' ? 'NSW' : datum.State === 'Victoria' ? 'VIC' : datum.State === 'Queensland' ? 'QLD' : datum.State === 'Western Australia' ? 'WA' : datum.State === 'South Australia' ? 'SA' : datum.State === 'Tasmania' ? 'TAS' : datum.State === 'Northern Territory' ? 'NT' : datum.State === 'Australian Capital Territory' ? 'ACT' : datum.State",
+      "as": "StateAbbreviation"
+    },
+    {
+      "calculate": "split(datum.Date, '/')[2] + '-' + split(datum.Date, '/')[1] + '-' + split(datum.Date, '/')[0]",
+      "as": "FormattedDate"
+    },
+    {
+      "calculate": "datetime(datum.FormattedDate)",
+      "as": "ParsedDate"
+    },
+    {
+      "calculate": "year(datum.ParsedDate)",
+      "as": "Year"
+    },
+    {
+      "calculate": "month(datum.ParsedDate)",
+      "as": "Month"
+    },
+    {
+      "calculate": "datum.Month === 0 ? 'January' : datum.Month === 1 ? 'February' : datum.Month === 2 ? 'March' : datum.Month === 3 ? 'April' : datum.Month === 4 ? 'May' : datum.Month === 5 ? 'June' : datum.Month === 6 ? 'July' : datum.Month === 7 ? 'August' : datum.Month === 8 ? 'September' : datum.Month === 9 ? 'October' : datum.Month === 10 ? 'November' : 'December'",
+      "as": "MonthName"
+    },
+    {
+      "filter": "datum.Year >= 2010 && datum.Year <= 2012"
+    },
+    {
+      "aggregate": [
+        {
+          "op": "sum",
+          "field": "Rainfall",
+          "as": "TotalRainfall"
+        }
+      ],
+      "groupby": [
+        "StateAbbreviation",
+        "MonthName"
+      ]
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "StateAbbreviation",
+          "type": "nominal",
+          "title": "State",
+          "axis": {
+            "labelAngle": 0
+          }
+        },
+        "y": {
+          "field": "TotalRainfall",
+          "type": "quantitative",
+          "title": "Total Rainfall (mm)"
+        },
+        "color": {
+          "field": "MonthName",
+          "type": "nominal",
+          "title": "Month"
+        },
+        "tooltip": [
+          {
+            "field": "StateAbbreviation",
+            "type": "nominal"
+          },
+          {
+            "field": "TotalRainfall",
+            "type": "quantitative",
+            "title": "Total Rainfall (mm)"
+          },
+          {
+            "field": "MonthName",
+            "type": "nominal",
+            "title": "Month"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "aggregate": [
+            {
+              "op": "sum",
+              "field": "TotalRainfall",
+              "as": "TotalRainfallText"
+            }
+          ],
+          "groupby": [
+            "StateAbbreviation"
+          ]
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "dy": -5,
+        "fontSize": 12,
+        "fontWeight": "bold",
+        "color": "black"
+      },
+      "encoding": {
+        "x": {
+          "field": "StateAbbreviation",
+          "type": "nominal"
+        },
+        "y": {
+          "field": "TotalRainfallText",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "TotalRainfallText",
+          "type": "quantitative",
+          "format": ".0f"
+        },
+        "color": {
+          "value": "black"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 450,
+  "height": 450,
+  "background": "transparent",
+  "data": {
+    "url": "TopoJSON Files/ne_2.json",
+    "format": {
+      "type": "topojson",
+      "feature": "ne_10m_admin_1_states_provinces"
+    }
+  },
+  "projection": {
+    "type": "mercator"
+  },
+  "transform": [
+    {
+      "calculate": "datum.properties.name === 'New South Wales' ? 'https://www.abc.net.au/news/2016-04-20/one-year-since-the-2015-hunter-valley-flood/7321888' : datum.properties.name === 'Australian Capital Territory' ? 'https://www.abc.net.au/news/2016-04-20/one-year-since-the-2015-hunter-valley-flood/7321888' : datum.properties.name === 'Victoria' ? 'https://www.abc.net.au/news/2016-03-16/satellite-pictures-reveal-scale-of-summers-bushfire-destruction/7232594' : datum.properties.name === 'Queensland' ? 'https://www.theguardian.com/australia-news/2015/oct/05/queensland-bushfires-emergency-crews-contend-with-hot-dry-weather' : datum.properties.name === 'Western Australia' ? 'https://knowledge.aidr.org.au/resources/bushfire-waroona-yarloop-fire-2016/#:~:text=The%20Waroona%20bushfire%2C%20100%20km,in%20Yarloop%20in%20January%202016.' : datum.properties.name === 'South Australia' ? 'https://knowledge.aidr.org.au/resources/storm-extreme-weather-event-south-australia-september-2016' : datum.properties.name === 'Tasmania' ? 'https://knowledge.aidr.org.au/resources/flood-tasmania-june-july-2016/' : datum.properties.name === 'Northern Territory' ? 'https://www.ntnews.com.au/news/northern-territory/nt-weather-records-broken-during-first-nine-months-of-2016/news-story/3a2e8db5d147a5df06bc46001cc88939?nk=82899e14999965f2fc98d51f91011829-1728706323' : null",
+      "as": "link"
+    }
+  ],
+  "mark": {
+    "type": "geoshape",
+    "stroke": "black",
+    "strokeWidth": 1
+  },
+  "encoding": {
+    "color": {
+      "field": "properties.name",
+      "type": "nominal",
+      "scale": {
+        "domain": [
+          "New South Wales",
+          "Victoria",
+          "Queensland",
+          "Western Australia",
+          "South Australia",
+          "Tasmania",
+          "Northern Territory",
+          "Australian Capital Territory"
+        ],
+        "range": [
+          "#ff9999",
+          "#66b3ff",
+          "#99ff99",
+          "#ffcc99",
+          "#c2c2f0",
+          "#ffb3e6",
+          "#ff6666",
+          "#c2f0c2"
+        ]
+      },
+      "legend": null
+    },
+    "href": {
+      "field": "link",
+      "type": "nominal"
+    }
+  }
+}

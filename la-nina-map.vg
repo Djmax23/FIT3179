@@ -1,0 +1,60 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 450,
+  "height": 450,
+  "background": "transparent",
+  "data": {
+    "url": "TopoJSON Files/ne_2.json",
+    "format": {
+      "type": "topojson",
+      "feature": "ne_10m_admin_1_states_provinces"
+    }
+  },
+  "projection": {
+    "type": "mercator"
+  },
+  "transform": [
+    {
+      "calculate": "datum.properties.name === 'New South Wales' ? 'https://www.abc.net.au/news/2010-10-15/flooding-isolates-nsw-towns/2299838' : datum.properties.name === 'Australian Capital Territory' ? 'https://www.abc.net.au/news/2010-10-15/flooding-isolates-nsw-towns/2299838' : datum.properties.name === 'Victoria' ? 'https://floodlist.com/australia/reflections-floods-victoria-2010-2011' : datum.properties.name === 'Queensland' ? 'https://knowledge.aidr.org.au/resources/flood-queensland-2010-2011/' : datum.properties.name === 'Western Australia' ? 'https://knowledge.aidr.org.au/resources/storm-severe-storm-perth-western-australia-2010/' : datum.properties.name === 'South Australia' ? 'https://www.abc.net.au/news/2010-12-08/flash-flooding-as-storms-sweep-sa/2366422' : datum.properties.name === 'Tasmania' ? 'https://www.abc.net.au/news/2010-08-12/safety-checks-after-blades-blow-in-the-wind/941156' : datum.properties.name === 'Northern Territory' ? 'https://www.abc.net.au/news/2010-01-09/alice-springs-flood-threat-passes/1203228' : null",
+      "as": "link"
+    }
+  ],
+  "mark": {
+    "type": "geoshape",
+    "stroke": "black",
+    "strokeWidth": 1
+  },
+  "encoding": {
+    "color": {
+      "field": "properties.name",
+      "type": "nominal",
+      "scale": {
+        "domain": [
+          "New South Wales",
+          "Victoria",
+          "Queensland",
+          "Western Australia",
+          "South Australia",
+          "Tasmania",
+          "Northern Territory",
+          "Australian Capital Territory"
+        ],
+        "range": [
+          "#ff9999",
+          "#66b3ff",
+          "#99ff99",
+          "#ffcc99",
+          "#c2c2f0",
+          "#ffb3e6",
+          "#ff6666",
+          "#c2f0c2"
+        ]
+      },
+      "legend": null
+    },
+    "href": {
+      "field": "link",
+      "type": "nominal"
+    }
+  }
+}

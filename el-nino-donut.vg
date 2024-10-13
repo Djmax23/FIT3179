@@ -1,0 +1,154 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Donut charts showing the proportion of days with and without rain for each state from 2015 to 2016.",
+  "background": "transparent",
+  "data": {
+    "url": "Data Files/cleaned_weather_data_with_states.csv"
+  },
+  "transform": [
+    {
+      "calculate": "split(datum.Date, '/')[2] + '-' + split(datum.Date, '/')[1] + '-' + split(datum.Date, '/')[0]",
+      "as": "FormattedDate"
+    },
+    {
+      "calculate": "datetime(datum.FormattedDate)",
+      "as": "ParsedDate"
+    },
+    {
+      "calculate": "year(datum.ParsedDate)",
+      "as": "Year"
+    },
+    {
+      "filter": "datum.Year >= 2015 && datum.Year <= 2016"
+    },
+    {
+      "calculate": "datum.Rainfall > 0 ? 'Days with Rain' : 'Days without Rain'",
+      "as": "RainCategory"
+    },
+    {
+      "aggregate": [
+        {
+          "op": "count",
+          "as": "TotalDays"
+        }
+      ],
+      "groupby": [
+        "State",
+        "RainCategory"
+      ]
+    },
+    {
+      "joinaggregate": [
+        {
+          "op": "sum",
+          "field": "TotalDays",
+          "as": "DaysPerState"
+        }
+      ],
+      "groupby": [
+        "State"
+      ]
+    },
+    {
+      "calculate": "datum.TotalDays / datum.DaysPerState * 100",
+      "as": "RainProportion"
+    },
+    {
+      "calculate": "datum.RainProportion / 2",
+      "as": "RainTextAngle"
+    },
+    {
+      "calculate": "datum.RainProportion + (100 - datum.RainProportion) / 2",
+      "as": "NoRainTextAngle"
+    }
+  ],
+  "facet": {
+    "field": "State",
+    "type": "nominal"
+  },
+  "columns": 4,
+  "spec": {
+    "width": 50,
+    "height": 50,
+    "layer": [
+      {
+        "mark": {
+          "type": "arc",
+          "innerRadius": 15,
+          "radius": 40
+        },
+        "encoding": {
+          "theta": {
+            "field": "RainProportion",
+            "type": "quantitative"
+          },
+          "color": {
+            "field": "RainCategory",
+            "type": "nominal",
+            "scale": {
+              "domain": [
+                "Days with Rain",
+                "Days without Rain"
+              ],
+              "range": [
+                "#FF5733",
+                "#bdbdbd"
+              ]
+            },
+            "legend": null
+          }
+        }
+      },
+      {
+        "mark": {
+          "type": "text",
+          "radius": 28,
+          "color": "black"
+        },
+        "encoding": {
+          "theta": {
+            "field": "RainTextAngle",
+            "type": "quantitative"
+          },
+          "text": {
+            "field": "RainProportion",
+            "type": "quantitative",
+            "format": ".0f"
+          },
+          "color": {
+            "condition": {
+              "test": "datum.RainCategory == 'Days with Rain'",
+              "value": "black"
+            },
+            "value": "transparent"
+          }
+        }
+      },
+      {
+        "mark": {
+          "type": "text",
+          "radius": 28,
+          "color": "black"
+        },
+        "encoding": {
+          "theta": {
+            "field": "NoRainTextAngle",
+            "type": "quantitative"
+          },
+          "text": {
+            "field": "RainProportion",
+            "type": "quantitative",
+            "format": ".0f"
+          },
+          "color": {
+            "condition": {
+              "test": "datum.RainCategory == 'Days without Rain'",
+              "value": "black"
+            },
+            "value": "transparent"
+          }
+        }
+      }
+    ]
+  }
+}
